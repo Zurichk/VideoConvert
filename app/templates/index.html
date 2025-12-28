@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoConvert - Conversor Moderno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .main-container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        
+        .header-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .drop-zone:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+        
+        .drop-zone.dragover {
+            border-color: #667eea;
+            background: #eef2ff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 16px;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            color: #1f2937;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .upload-hint {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-name-display {
+            margin-top: 12px;
+            padding: 10px;
+            background: #eef2ff;
+            border-radius: 8px;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .format-selector {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-select {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        .compress-option {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .compress-option:hover {
+            background: #f1f5f9;
+        }
+        
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 2px solid #cbd5e1;
+        }
+        
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .form-check-label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-convert {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-convert:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-convert:active {
+            transform: translateY(0);
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 16px;
+            margin-bottom: 24px;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .success-icon {
+            font-size: 64px;
+            color: #10b981;
+            margin-bottom: 16px;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .success-text {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            margin-bottom: 16px;
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
+            color: white;
+        }
+        
+        .link-secondary {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .link-secondary:hover {
+            color: #667eea;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border: 6px solid rgba(255, 255, 255, 0.2);
+            border-top: 6px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .loading-subtext {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: progressAnimation 2s ease-in-out infinite;
+        }
+        
+        @keyframes progressAnimation {
+            0% {
+                width: 0%;
+                background-position: 0% 50%;
+            }
+            50% {
+                width: 100%;
+                background-position: 100% 50%;
+            }
+            100% {
+                width: 0%;
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <div class="loading-text">
+            <i class="fas fa-magic"></i> Convirtiendo tu archivo...
+        </div>
+        <div class="loading-subtext">
+            Esto puede tomar unos momentos
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container main-container">
+    <div class="header-section">
+        <div class="logo-icon">
+            <i class="fas fa-film"></i>
+        </div>
+        <h2 class="header-title">VideoConvert</h2>
+        <p class="header-subtitle">Convierte tus archivos de video y audio fácilmente</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info">
+          {% for message in messages %}
+            <p class="mb-0"><i class="fas fa-info-circle me-2"></i>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if download_file %}
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h4 class="success-title">¡Conversión Exitosa!</h4>
+            <p class="success-text">Tu archivo ha sido procesado correctamente</p>
+            <a href="{{ url_for('download_file', filename=download_file) }}" class="btn-download">
+                <i class="fas fa-download"></i>
+                Descargar Archivo
+            </a>
+            <br>
+            <a href="{{ url_for('index') }}" class="link-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Convertir otro archivo
+            </a>
+        </div>
+    {% else %}
+        <form action="/convert" method="post" enctype="multipart/form-data" id="convertForm">
+            <div class="file-upload-wrapper">
+                <div class="drop-zone" id="dropZone">
+                    <input class="file-input" type="file" id="file" name="file" required accept="video/*,audio/*">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p class="upload-text">Arrastra tu archivo aquí</p>
+                    <p class="upload-hint">o haz clic para seleccionar</p>
+                    <div class="file-name-display" id="fileNameDisplay"></div>
+                </div>
+            </div>
+
+            <div class="format-selector">
+                <label for="format" class="form-label">
+                    <i class="fas fa-exchange-alt"></i>
+                    Formato de destino
+                </label>
+                <select class="form-select" id="format" name="format" required>
+                    <option value="" selected disabled>Elige un formato...</option>
+                    <optgroup label="📹 Video">
+                        <option value="mp4">MP4</option>
+                        <option value="mkv">MKV</option>
+                        <option value="avi">AVI</option>
+                        <option value="mov">MOV</option>
+                        <option value="webm">WEBM</option>
+                    </optgroup>
+                    <optgroup label="🎵 Audio">
+                        <option value="mp3">MP3</option>
+                        <option value="wav">WAV</option>
+                        <option value="flac">FLAC</option>
+                        <option value="ogg">OGG</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="compress-option">
+                <div class="form-check d-flex align-items-center">
+                    <input type="checkbox" class="form-check-input" id="compress" name="compress">
+                    <label class="form-check-label" for="compress">
+                        <i class="fas fa-compress-alt"></i>
+                        Aplicar compresión (Reducir tamaño del archivo)
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-convert">
+                <i class="fas fa-cog me-2"></i> Convertir Archivo
+            </button>
+        </form>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Drag and drop functionality
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('file');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const convertForm = document.getElementById('convertForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    if (dropZone && fileInput) {
+        // Prevent defaults
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('dragover');
+            }, false);
+        });
+
+        // Handle drop
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                displayFileName(files[0].name);
+            }
+        }, false);
+
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                displayFileName(e.target.files[0].name);
+            }
+        });
+
+        function displayFileName(name) {
+            fileNameDisplay.textContent = `📁 ${name}`;
+            fileNameDisplay.style.display = 'block';
+        }
+    }
+    
+    // Show loading overlay on form submit
+    if (convertForm && loadingOverlay) {
+        convertForm.addEventListener('submit', (e) => {
+            // Validate form before showing loader
+            if (convertForm.checkValidity()) {
+                loadingOverlay.classList.add('active');
+            }
+        });
+    }
+</script>
+</body>
+</html>
