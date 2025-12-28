@@ -29,4 +29,5 @@ RUN mkdir -p app/uploads app/processed
 EXPOSE 5048
 
 # Comando para ejecutar la aplicación usando gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5048", "app.src.app:app"]
+WORKDIR /app/app/src
+CMD ["gunicorn", "--bind", "0.0.0.0:5048", "--chdir", "/app/app/src", "app:app"]

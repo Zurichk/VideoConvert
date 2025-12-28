@@ -5,11 +5,16 @@ Aplicación principal Flask para el convertidor de video.
 import os
 import logging
 import time
+import sys
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, send_from_directory, flash, redirect, url_for
 from werkzeug.utils import secure_filename
-from converter import AEPMediaConverter
 from apscheduler.schedulers.background import BackgroundScheduler
+
+# Agregar el directorio actual al path para imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from converter import AEPMediaConverter
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO)
